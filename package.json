@@ -1,6 +1,15 @@
 {
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js"
+  },
   "dependencies": {
+    "express": "^4.16.3",
     "flow-parser": "^0.78.0",
-    "jscodeshift": "^0.5.1"
+    "jscodeshift": "^0.5.1",
+    "next": "^6.1.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
   }
 }

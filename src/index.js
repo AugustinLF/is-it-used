@@ -2,6 +2,7 @@ const fs = require('fs');
 const j = require('jscodeshift');
 const path = require('path');
 
+// This should use @babel/parser
 const parse = source => j(source, {parser: require('flow-parser')});
 
 const cardPath = './fixtures/documentCard.js';
