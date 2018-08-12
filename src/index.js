@@ -1,5 +1,3 @@
-const parser = require('babylon');
-const recast = require('recast');
 const fs = require('fs');
 const j = require('jscodeshift');
 const path = require('path');
