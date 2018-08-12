@@ -1,4 +1,3 @@
-import React from 'react';
+import App from '../src/client/app';
 
-const App = () => <div>Coucou</div>;
 export default App;
