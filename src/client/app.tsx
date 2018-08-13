@@ -1,34 +1,28 @@
-import ApolloClient from 'apollo-boost';
 import React from 'react';
-import {ApolloProvider, Query} from 'react-apollo';
+import {Query} from 'react-apollo';
 import gql from 'graphql-tag';
-import fetch from 'isomorphic-unfetch';
-
-// @ts-ignore Polyfill fetch() on the server (used by apollo-client)
-if (!process.browser) {
-    // @ts-ignore
-    global.fetch = fetch;
-}
-
-const client = new ApolloClient({
-    uri: 'http://localhost:3000/graphql',
-});
 
 const App = () => (
-    <ApolloProvider client={client}>
-        <div>
-            <h2>My first Apollo app 🚀</h2>
+    <div>
+        <h2>My first Apollo app 🚀</h2>
+        {process.browser && (
             <Query
                 query={gql`
                     {
-                        hello
+                        files {
+                            path
+                        }
                     }
                 `}
             >
-                {({data}) => <div>{data.hello}</div>}
+                {({data}) =>
+                    console.log(data) || (
+                        <div>{data.files && data.files.map(file => <span>file.path</span>)}</div>
+                    )
+                }
             </Query>
-        </div>
-    </ApolloProvider>
+        )}
+    </div>
 );
 
 export default App;
