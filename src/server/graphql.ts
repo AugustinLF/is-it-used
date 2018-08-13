@@ -3,6 +3,7 @@ import {getAllFiles} from './fileSystem';
 
 export const typeDefs = gql`
     type File {
+        id: ID
         path: String!
     }
 
@@ -13,7 +14,6 @@ export const typeDefs = gql`
 
 export const resolvers = {
     Query: {
-        // files: () => [],
         files: () => getAllFiles(['./fixtures']),
     },
 };

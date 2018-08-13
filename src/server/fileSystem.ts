@@ -44,8 +44,6 @@ export function getAllFiles(paths) {
         paths.map(
             file =>
                 new Promise(resolve => {
-                    console.log(file);
-                    // console.log('here', path.resolve(file));
                     fs.lstat(file, (err, stat) => {
                         if (err) {
                             process.stderr.write(

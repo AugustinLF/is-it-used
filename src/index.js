@@ -42,5 +42,3 @@ const isImported = (file, target) => {
 };
 
 const target = createTarget(cardPath);
-console.log(isImported('./fixtures/other.js', target));
-console.log(isImported('./fixtures/first.js', target));

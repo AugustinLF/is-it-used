@@ -2,14 +2,16 @@
   "scripts": {
     "dev": "nodemon src/server/index.ts",
     "build": "next build && tsc --project tsconfig.server.json",
-    "start": "NODE_ENV=production node .next/production-server/index.js"
+    "start": "NODE_ENV=production node .next/production-server/index.js",
+    "schema": "rm -rf schema && mkdir schema && graphql get-schema -e http://localhost:3000/graphql -o schema/schema.graphql --no-all",
+    "prerelay": "yarn schema",
+    "relay": "relay-compiler --src ./src --exclude **/build/** **/node_modules/** **/test/**  **/__generated__/** --schema ./schema/schema.graphql"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.48",
     "@zeit/next-typescript": "1.1.0",
-    "apollo-boost": "^0.1.13",
     "apollo-server-express": "^2.0.0",
-    "babel-loader": "^7.1.4",
+    "babel-plugin-relay": "^1.6.2",
     "express": "^4.16.3",
     "flow-parser": "^0.78.0",
     "graphql": "^0.13.2",
@@ -17,16 +19,17 @@
     "jscodeshift": "^0.5.1",
     "next": "latest",
     "react": "^16.4.0",
-    "react-apollo": "^2.1.11",
     "react-dom": "^16.4.0",
+    "react-relay": "^1.6.2",
     "typescript": "latest",
     "typescript-babel-jest": "^1.0.5"
   },
   "devDependencies": {
     "@types/next": "^2.4.11",
     "@types/node": "^10.5.8",
-    "@types/react": "^16.0.36",
+    "graphql-cli": "^2.16.5",
     "nodemon": "^1.17.5",
+    "relay-compiler": "^1.6.2",
     "ts-node": "^4.1.0"
   }
 }
