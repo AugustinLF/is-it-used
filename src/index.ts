@@ -8,16 +8,6 @@ const parse = source => j(source, {parser: require('flow-parser')});
 const cardPath = './fixtures/documentCard.js';
 // Ok, we know it's a default export, now we want to find if it imports it
 
-const createTarget = targetPath => {
-    const source = fs.readFileSync(cardPath).toString();
-    // const sourceAst = parse(source);
-
-    return {
-        absolutePath: path.resolve(targetPath),
-        defaultExport: true,
-    };
-};
-
 const isImported = (file, target) => {
     const fileContent = fs.readFileSync(file).toString();
     const ast = parse(fileContent);
@@ -40,5 +30,3 @@ const isImported = (file, target) => {
 
     return collection.length >= 1;
 };
-
-const target = createTarget(cardPath);

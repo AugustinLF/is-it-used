@@ -11,9 +11,14 @@ function fetchQuery(operation, variables) {
             query: operation.text,
             variables,
         }),
-    }).then(response => {
-        return response.json();
-    });
+    })
+        .then(response => response.json())
+        .then(json => {
+            if (json.error || (json.errors && json.errors.length > 0)) {
+                return Promise.reject(json);
+            }
+            return json;
+        });
 }
 
 const environment = new Environment({

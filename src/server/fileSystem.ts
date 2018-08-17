@@ -54,7 +54,6 @@ export function getAllFiles(paths) {
                         }
 
                         if (stat.isDirectory()) {
-                            console.log('isDirectory', file);
                             dirFiles(file, list => resolve(list));
                         } else {
                             resolve([file]);

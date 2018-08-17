@@ -11,6 +11,10 @@ const handle = app.getRequestHandler();
 const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
+    formatError: error => {
+        console.log(error);
+        throw error;
+    },
 });
 
 app.prepare().then(() => {
