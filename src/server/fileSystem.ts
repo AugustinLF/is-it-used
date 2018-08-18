@@ -61,7 +61,5 @@ export function getAllFiles(paths) {
                     });
                 })
         )
-    )
-        .then(concatAll)
-        .then(files => files.map(file => ({path: file})));
+    ).then(concatAll);
 }

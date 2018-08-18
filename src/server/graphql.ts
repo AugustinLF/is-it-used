@@ -31,13 +31,13 @@ export const resolvers = {
         files: () => getAllFiles(['./fixtures']),
         // TODO should check for existence
         file(_, {path}) {
-            const file = {path};
-            return file;
+            return path;
         },
     },
     File: {
-        id: ({path}) => path,
-        exports: ({path}) => {
+        id: path => path,
+        path: path => path,
+        exports: path => {
             const defaultExport = getDefaultFileExports(path);
             const namedExports = getNamedFileExports(path);
 
@@ -46,7 +46,7 @@ export const resolvers = {
 
             return [...fileExports, ...namedExports];
         },
-        absolutePath: ({path}) => resolve(path),
+        absolutePath: path => resolve(path),
     },
     FileExport: {
         __resolveType(obj, _, info) {
