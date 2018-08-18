@@ -67,7 +67,7 @@ class App extends React.Component {
                                                         key={index}
                                                         onClick={() =>
                                                             this.setState({
-                                                                export: fileExport.namedExportNam,
+                                                                export: fileExport.namedExportName,
                                                             })
                                                         }
                                                     >

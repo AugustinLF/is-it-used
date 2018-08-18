@@ -71,17 +71,15 @@ export const resolvers = {
         },
     },
     DefaultExport: {
-        callsites: ({path}) => {
-            return getAllFiles(['./fixtures']).then(files =>
-                files.filter(file => isImported(file, resolve(path)))
-            );
-        },
+        callsites,
     },
     NamedExport: {
-        callsites: ({path}) => {
-            console.log('in NamedExport');
-            console.log();
-            return [];
-        },
+        callsites,
     },
 };
+
+function callsites({path, type, name}) {
+    return getAllFiles(['./fixtures']).then(files =>
+        files.filter(file => isImported(file, {path, type, name}))
+    );
+}

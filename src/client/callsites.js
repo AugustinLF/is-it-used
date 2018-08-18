@@ -27,6 +27,8 @@ const Callsites = ({path, exportName}) => (
                 },
             } = props;
 
+            // modify wording for default/named export
+
             return (
                 <div>
                     {callsites.length > 0 ? (

@@ -16,12 +16,26 @@ export const isImported = (file, target) => {
                 const {dir: origin} = path.parse(absolutePath);
                 // TODO handle extension
                 const importedAbsolutePath = path.join(origin, importName) + '.js';
-                return importedAbsolutePath === target;
+                return importedAbsolutePath === path.resolve(target.path);
             },
         },
         specifiers: specifiers => {
-            if (specifiers.some(specifier => specifier.type === 'ImportDefaultSpecifier'))
+            const {type, name} = target;
+            if (
+                type === 'default' &&
+                specifiers.some(specifier => specifier.type === 'ImportDefaultSpecifier')
+            )
                 return true;
+
+            if (
+                type === 'named' &&
+                specifiers.some(
+                    specifier =>
+                        specifier.type === 'ImportSpecifier' && specifier.imported.name === name
+                )
+            )
+                return true;
+            // handle * as React (ImportNamespaceSpecifier)
             return false;
         },
     });
