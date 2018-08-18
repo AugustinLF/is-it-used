@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 5d58843c3163cced9c6a77080f09a0d8
+ * @relayHash 494f02e0b547553a6867eef7359e009e
  */
 
 /* eslint-disable */
@@ -9,21 +9,21 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type appQueryVariables = {||};
-export type appQueryResponse = {|
+export type fileListQueryVariables = {||};
+export type fileListQueryResponse = {|
   +files: $ReadOnlyArray<{|
     +path: string
   |}>
 |};
-export type appQuery = {|
-  variables: appQueryVariables,
-  response: appQueryResponse,
+export type fileListQuery = {|
+  variables: fileListQueryVariables,
+  response: fileListQueryResponse,
 |};
 */
 
 
 /*
-query appQuery {
+query fileListQuery {
   files {
     path
     id
@@ -42,13 +42,13 @@ var v0 = {
 return {
   "kind": "Request",
   "operationKind": "query",
-  "name": "appQuery",
+  "name": "fileListQuery",
   "id": null,
-  "text": "query appQuery {\n  files {\n    path\n    id\n  }\n}\n",
+  "text": "query fileListQuery {\n  files {\n    path\n    id\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
-    "name": "appQuery",
+    "name": "fileListQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": [],
@@ -69,7 +69,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "appQuery",
+    "name": "fileListQuery",
     "argumentDefinitions": [],
     "selections": [
       {
@@ -96,5 +96,5 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'b964689d29f3b852234b3b32e18f4951';
+(node/*: any*/).hash = '65f35bc8d7b1929ab8d2328f0a838193';
 module.exports = node;

@@ -2,45 +2,19 @@ import * as React from 'react';
 import {QueryRenderer, graphql} from 'react-relay';
 
 import environment from './relayEnvironment';
+import FileList from './fileList';
+import Callsites from './callsites';
 
 class App extends React.Component {
     state = {
         file: null,
+        export: null,
     };
     render() {
         return (
             <div>
                 <h2>Is it used?</h2>
-                <QueryRenderer
-                    environment={environment}
-                    query={
-                        process.browser
-                            ? graphql`
-                                  query appQuery {
-                                      files {
-                                          path
-                                      }
-                                  }
-                              `
-                            : null
-                    }
-                    render={({error, props}) => {
-                        if (!props || !props.files) return null;
-
-                        return (
-                            <ul>
-                                {props.files.map(file => (
-                                    <li
-                                        key={file.path}
-                                        onClick={() => this.setState({file: file.path})}
-                                    >
-                                        {file.path}
-                                    </li>
-                                ))}
-                            </ul>
-                        );
-                    }}
-                />
+                <FileList selectFile={file => this.setState({file, export: null})} />
                 <QueryRenderer
                     environment={environment}
                     query={
@@ -78,13 +52,25 @@ class App extends React.Component {
                                         {file.exports.map(
                                             (fileExport, index) =>
                                                 fileExport.__typename === 'DefaultExport' ? (
-                                                    <li key={index}>
+                                                    <li
+                                                        key={index}
+                                                        onClick={() =>
+                                                            this.setState({export: 'default'})
+                                                        }
+                                                    >
                                                         Default Export:{' '}
                                                         {fileExport.defaultExportName ||
                                                             'Could not infer export name'}
                                                     </li>
                                                 ) : (
-                                                    <li key={index}>
+                                                    <li
+                                                        key={index}
+                                                        onClick={() =>
+                                                            this.setState({
+                                                                export: fileExport.namedExportNam,
+                                                            })
+                                                        }
+                                                    >
                                                         Named export: {fileExport.namedExportName}
                                                     </li>
                                                 )
@@ -92,6 +78,12 @@ class App extends React.Component {
                                     </ul>
                                 ) : (
                                     <div>Pas d'exports</div>
+                                )}
+                                {this.state.export && (
+                                    <Callsites
+                                        path={this.state.file}
+                                        exportName={this.state.export}
+                                    />
                                 )}
                             </div>
                         );
