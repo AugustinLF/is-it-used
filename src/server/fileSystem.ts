@@ -61,5 +61,9 @@ export function getAllFiles(paths) {
                     });
                 })
         )
-    ).then(concatAll);
+    )
+        .then(concatAll)
+        .then(files =>
+            files.filter(file => path.extname(file) === '.js' || path.extname(file) === '.jsx')
+        );
 }
