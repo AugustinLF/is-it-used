@@ -78,8 +78,29 @@ export const resolvers = {
     },
 };
 
-function callsites({path, type, name}) {
-    return getAllFiles(['./fixtures']).then(files =>
-        files.filter(file => isImported(file, {path, type, name}))
-    );
+const getFileDependents = (files, {path, type, name}) => {
+    let callsitesFiles = [];
+    /*
+        Three cases:
+            - imported and use => we keep it
+            - imported and reexported => we need to redo that (determine which export is the one)
+            - not used
+    */
+    for (const file of files) {
+        const imported = isImported(file, {path, type, name});
+        if (imported) {
+            if (imported.used) callsitesFiles.push(file);
+
+            if (imported.defaultExport) {
+                callsitesFiles = [
+                    ...callsitesFiles,
+                    ...getFileDependents(files, {path: file, type: 'default', name}),
+                ];
+            }
+        }
+    }
+    return callsitesFiles;
+};
+function callsites(params) {
+    return getAllFiles(['./fixtures']).then(files => getFileDependents(files, params));
 }
