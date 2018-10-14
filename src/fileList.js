@@ -10,19 +10,21 @@ const FileList = ({selectFile}) => (
             process.browser
                 ? graphql`
                       query fileListQuery {
-                          files {
-                              path
+                          project(path: "./fixtures") {
+                              files {
+                                  path
+                              }
                           }
                       }
                   `
                 : null
         }
         render={({error, props}) => {
-            if (!props || !props.files) return null;
+            if (!props || !props.project || !props.project.files) return null;
 
             return (
                 <ul>
-                    {props.files.map(file => (
+                    {props.project.files.map(file => (
                         <li key={file.path} onClick={() => selectFile(file.path)}>
                             {file.path}
                         </li>

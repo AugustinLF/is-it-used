@@ -7,17 +7,24 @@ const {isImported} = require('./isImported');
 
 const typeDefs = gql`
     interface FileExport {
-        # Should perhaps be named otherwise since an export is not really a call site
-        callsites: [File!]!
+        # Should perhaps be named otherwise since an export is not really a call-site
+        callSites: [File!]!
+    }
+
+    type Project {
+        id: String!
+        path: String!
+        files: [File!]!
+        file(path: String!): File
     }
 
     type DefaultExport implements FileExport {
         name: String
-        callsites: [File!]!
+        callSites: [File!]!
     }
     type NamedExport implements FileExport {
         name: String!
-        callsites: [File!]!
+        callSites: [File!]!
     }
 
     type File {
@@ -27,15 +34,20 @@ const typeDefs = gql`
         exports: [FileExport!]!
         export(name: String!): FileExport
     }
+
     type Query {
-        files: [File!]!
-        file(path: String!): File
+        project(path: String!): Project
     }
 `;
 
 const resolvers = {
     Query: {
-        files: () => getAllFiles(['./fixtures']),
+        project: (_, {path}) => ({path}),
+    },
+    Project: {
+        id: ({path}) => path,
+        path: ({path}) => path,
+        files: ({path}) => getAllFiles([path]),
         // TODO should check for existence
         file(_, {path}) {
             return path;
@@ -71,15 +83,15 @@ const resolvers = {
         },
     },
     DefaultExport: {
-        callsites,
+        callSites,
     },
     NamedExport: {
-        callsites,
+        callSites,
     },
 };
 
 const getFileDependents = (files, {path, type, name}) => {
-    let callsitesFiles = [];
+    let callSitesFiles = [];
     /*
         Three cases:
             - imported and use => we keep it
@@ -89,19 +101,19 @@ const getFileDependents = (files, {path, type, name}) => {
     for (const file of files) {
         const imported = isImported(file, {path, type, name});
         if (imported) {
-            if (imported.used) callsitesFiles.push(file);
+            if (imported.used) callSitesFiles.push(file);
 
             if (imported.defaultExport) {
-                callsitesFiles = [
-                    ...callsitesFiles,
+                callSitesFiles = [
+                    ...callSitesFiles,
                     ...getFileDependents(files, {path: file, type: 'default', name}),
                 ];
             }
         }
     }
-    return callsitesFiles;
+    return callSitesFiles;
 };
-function callsites(params) {
+function callSites(params) {
     return getAllFiles(['./fixtures']).then(files => getFileDependents(files, params));
 }
 

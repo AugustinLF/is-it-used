@@ -3,7 +3,7 @@ import {QueryRenderer, graphql} from 'react-relay';
 
 import environment from './relayEnvironment';
 import FileList from './fileList';
-import Callsites from './callsites';
+import CallSites from './callSites';
 
 class App extends React.Component {
     state = {
@@ -21,16 +21,18 @@ class App extends React.Component {
                         this.state.file
                             ? graphql`
                                   query appFileQuery($path: String!) {
-                                      file(path: $path) {
-                                          path
-                                          absolutePath
-                                          exports {
-                                              __typename
-                                              ... on DefaultExport {
-                                                  defaultExportName: name
-                                              }
-                                              ... on NamedExport {
-                                                  namedExportName: name
+                                      project(path: "./fixtures") {
+                                          file(path: $path) {
+                                              path
+                                              absolutePath
+                                              exports {
+                                                  __typename
+                                                  ... on DefaultExport {
+                                                      defaultExportName: name
+                                                  }
+                                                  ... on NamedExport {
+                                                      namedExportName: name
+                                                  }
                                               }
                                           }
                                       }
@@ -40,9 +42,11 @@ class App extends React.Component {
                     }
                     variables={{path: this.state.file}}
                     render={({props, error}) => {
-                        if (!props || !props.file) return null;
+                        if (!props || !props.project || !props.project.file) return null;
 
-                        const {file} = props;
+                        const {
+                            project: {file},
+                        } = props;
                         return (
                             <div>
                                 <h2>{file.path}</h2>
@@ -77,10 +81,10 @@ class App extends React.Component {
                                         )}
                                     </ul>
                                 ) : (
-                                    <div>Pas d'exports</div>
+                                    <div>No exports</div>
                                 )}
                                 {this.state.export && (
-                                    <Callsites
+                                    <CallSites
                                         path={this.state.file}
                                         exportName={this.state.export}
                                     />

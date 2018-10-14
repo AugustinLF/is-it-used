@@ -3,27 +3,31 @@ import {QueryRenderer, graphql} from 'react-relay';
 
 import environment from './relayEnvironment';
 
-const Callsites = ({path, exportName}) => (
+const CallSites = ({path, exportName}) => (
     <QueryRenderer
         environment={environment}
         variables={{path, exportName}}
         query={graphql`
-            query callsitesQuery($path: String!, $exportName: String!) {
-                file(path: $path) {
-                    export(name: $exportName) {
-                        callsites {
-                            path
+            query callSitesQuery($path: String!, $exportName: String!) {
+                project(path: "./fixtures") {
+                    file(path: $path) {
+                        export(name: $exportName) {
+                            callSites {
+                                path
+                            }
                         }
                     }
                 }
             }
         `}
         render={({props, error}) => {
-            if (!props || !props.file) return null;
+            if (!props || !props.project || !props.project.file) return null;
             // TODO handle nullables
             const {
-                file: {
-                    export: {callsites},
+                project: {
+                    file: {
+                        export: {callSites},
+                    },
                 },
             } = props;
 
@@ -31,12 +35,12 @@ const Callsites = ({path, exportName}) => (
 
             return (
                 <div>
-                    {callsites.length > 0 ? (
+                    {callSites.length > 0 ? (
                         <div>
                             {`The export ${exportName} of ${path} is used in:`}
                             <ul>
-                                {callsites.map((callsite, index) => (
-                                    <li key={index}>{callsite.path}</li>
+                                {callSites.map((callSite, index) => (
+                                    <li key={index}>{callSite.path}</li>
                                 ))}
                             </ul>
                         </div>
@@ -48,4 +52,4 @@ const Callsites = ({path, exportName}) => (
         }}
     />
 );
-export default Callsites;
+export default CallSites;

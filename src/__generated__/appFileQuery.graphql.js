@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 1f428d6312fb8ebf84d81e0cbc60ac06
+ * @relayHash 844ab23bdc40e9842e429f18c23b27d9
  */
 
 /* eslint-disable */
@@ -13,20 +13,22 @@ export type appFileQueryVariables = {|
   path: string
 |};
 export type appFileQueryResponse = {|
-  +file: ?{|
-    +path: string,
-    +absolutePath: string,
-    +exports: $ReadOnlyArray<{|
-      +__typename: "DefaultExport",
-      +defaultExportName: ?string,
-    |} | {|
-      +__typename: "NamedExport",
-      +namedExportName: string,
-    |} | {|
-      // This will never be '%other', but we need some
-      // value in case none of the concrete values match.
-      +__typename: "%other"
-    |}>,
+  +project: ?{|
+    +file: ?{|
+      +path: string,
+      +absolutePath: string,
+      +exports: $ReadOnlyArray<{|
+        +__typename: "DefaultExport",
+        +defaultExportName: ?string,
+      |} | {|
+        +__typename: "NamedExport",
+        +namedExportName: string,
+      |} | {|
+        // This will never be '%other', but we need some
+        // value in case none of the concrete values match.
+        +__typename: "%other"
+      |}>,
+    |}
   |}
 |};
 export type appFileQuery = {|
@@ -40,19 +42,21 @@ export type appFileQuery = {|
 query appFileQuery(
   $path: String!
 ) {
-  file(path: $path) {
-    path
-    absolutePath
-    exports {
-      __typename
-      ... on DefaultExport {
-        defaultExportName: name
+  project(path: "./fixtures") {
+    file(path: $path) {
+      path
+      absolutePath
+      exports {
+        __typename
+        ... on DefaultExport {
+          defaultExportName: name
+        }
+        ... on NamedExport {
+          namedExportName: name
+        }
       }
-      ... on NamedExport {
-        namedExportName: name
-      }
+      id
     }
-    id
   }
 }
 */
@@ -68,27 +72,35 @@ var v0 = [
 ],
 v1 = [
   {
+    "kind": "Literal",
+    "name": "path",
+    "value": "./fixtures",
+    "type": "String!"
+  }
+],
+v2 = [
+  {
     "kind": "Variable",
     "name": "path",
     "variableName": "path",
     "type": "String!"
   }
 ],
-v2 = {
+v3 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "path",
   "args": null,
   "storageKey": null
 },
-v3 = {
+v4 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "absolutePath",
   "args": null,
   "storageKey": null
 },
-v4 = {
+v5 = {
   "kind": "LinkedField",
   "alias": null,
   "name": "exports",
@@ -137,7 +149,7 @@ return {
   "operationKind": "query",
   "name": "appFileQuery",
   "id": null,
-  "text": "query appFileQuery(\n  $path: String!\n) {\n  file(path: $path) {\n    path\n    absolutePath\n    exports {\n      __typename\n      ... on DefaultExport {\n        defaultExportName: name\n      }\n      ... on NamedExport {\n        namedExportName: name\n      }\n    }\n    id\n  }\n}\n",
+  "text": "query appFileQuery(\n  $path: String!\n) {\n  project(path: \"./fixtures\") {\n    file(path: $path) {\n      path\n      absolutePath\n      exports {\n        __typename\n        ... on DefaultExport {\n          defaultExportName: name\n        }\n        ... on NamedExport {\n          namedExportName: name\n        }\n      }\n      id\n    }\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -149,15 +161,26 @@ return {
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "file",
-        "storageKey": null,
+        "name": "project",
+        "storageKey": "project(path:\"./fixtures\")",
         "args": v1,
-        "concreteType": "File",
+        "concreteType": "Project",
         "plural": false,
         "selections": [
-          v2,
-          v3,
-          v4
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "file",
+            "storageKey": null,
+            "args": v2,
+            "concreteType": "File",
+            "plural": false,
+            "selections": [
+              v3,
+              v4,
+              v5
+            ]
+          }
         ]
       }
     ]
@@ -170,21 +193,32 @@ return {
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "file",
-        "storageKey": null,
+        "name": "project",
+        "storageKey": "project(path:\"./fixtures\")",
         "args": v1,
-        "concreteType": "File",
+        "concreteType": "Project",
         "plural": false,
         "selections": [
-          v2,
-          v3,
-          v4,
           {
-            "kind": "ScalarField",
+            "kind": "LinkedField",
             "alias": null,
-            "name": "id",
-            "args": null,
-            "storageKey": null
+            "name": "file",
+            "storageKey": null,
+            "args": v2,
+            "concreteType": "File",
+            "plural": false,
+            "selections": [
+              v3,
+              v4,
+              v5,
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "id",
+                "args": null,
+                "storageKey": null
+              }
+            ]
           }
         ]
       }
@@ -193,5 +227,5 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '9169cf49f2a7b7f843e899dc9aafbf9d';
+(node/*: any*/).hash = '6c6c760bc660265753ed563fc07e1f89';
 module.exports = node;

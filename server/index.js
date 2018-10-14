@@ -6,7 +6,7 @@ const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
     formatError: error => {
-        console.log(error);
+        console.error(error);
         throw error;
     },
 });
