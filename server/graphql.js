@@ -1,13 +1,13 @@
-import {gql} from 'apollo-server-express';
-import {resolve} from 'path';
+const {gql} = require('apollo-server-express');
+const {resolve} = require('path');
 
-import {getDefaultFileExports, getNamedFileExports} from './getFileExports';
-import {getAllFiles} from './fileSystem';
-import {isImported} from './isImported';
+const {getDefaultFileExports, getNamedFileExports} = require('./getFileExports');
+const {getAllFiles} = require('./fileSystem');
+const {isImported} = require('./isImported');
 
-export const typeDefs = gql`
+const typeDefs = gql`
     interface FileExport {
-        # Sould perhaps be named otherwise since an export is not really a call site
+        # Should perhaps be named otherwise since an export is not really a call site
         callsites: [File!]!
     }
 
@@ -33,7 +33,7 @@ export const typeDefs = gql`
     }
 `;
 
-export const resolvers = {
+const resolvers = {
     Query: {
         files: () => getAllFiles(['./fixtures']),
         // TODO should check for existence
@@ -104,3 +104,8 @@ const getFileDependents = (files, {path, type, name}) => {
 function callsites(params) {
     return getAllFiles(['./fixtures']).then(files => getFileDependents(files, params));
 }
+
+module.exports = {
+    typeDefs,
+    resolvers,
+};

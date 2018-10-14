@@ -6,7 +6,7 @@ const path = require('path');
 const parse = source => j(source, {parser: require('flow-parser')});
 
 // target is an absolutePath
-export const isImported = (file, target) => {
+const isImported = (file, target) => {
     const fileContent = fs.readFileSync(file).toString();
     const ast = parse(fileContent);
     const absolutePath = path.resolve(file);
@@ -73,4 +73,7 @@ export const isImported = (file, target) => {
         defaultExport: defaultExport.length === 1,
         namedExport: namedExport.length === 1 ? localImportedName : null,
     };
+};
+module.exports = {
+    isImported,
 };

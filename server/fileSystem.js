@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import * as path from 'path';
+const fs = require('fs');
+const path = require('path');
 
 function concatAll(arrays) {
     return arrays.reduce((result, array) => (result.push.apply(result, array), result), []);
@@ -39,7 +39,7 @@ function dirFiles(dir, callback, acc = {files: [], remaining: 1}) {
     });
 }
 
-export function getAllFiles(paths) {
+function getAllFiles(paths) {
     return Promise.all(
         paths.map(
             file =>
@@ -67,3 +67,7 @@ export function getAllFiles(paths) {
             files.filter(file => path.extname(file) === '.js' || path.extname(file) === '.jsx')
         );
 }
+
+module.exports = {
+    getAllFiles,
+};

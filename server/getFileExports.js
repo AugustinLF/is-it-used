@@ -1,10 +1,10 @@
-import * as fs from 'fs';
+const fs = require('fs');
 const j = require('jscodeshift');
 const parser = require('flow-parser');
 
 const parse = source => j(source, {parser});
 
-export const getDefaultFileExports = targetPath => {
+const getDefaultFileExports = targetPath => {
     const fileContent = fs.readFileSync(targetPath).toString();
     const ast = parse(fileContent);
     const defaultExport = ast.find(j.ExportDefaultDeclaration);
@@ -22,7 +22,7 @@ export const getDefaultFileExports = targetPath => {
         : null;
 };
 
-export const getNamedFileExports = targetPath => {
+const getNamedFileExports = targetPath => {
     const fileContent = fs.readFileSync(targetPath).toString();
     const ast = parse(fileContent);
     const namedExports = ast.find(j.ExportNamedDeclaration);
@@ -46,4 +46,9 @@ export const getNamedFileExports = targetPath => {
         }
     });
     return fileExports;
+};
+
+module.exports = {
+    getDefaultFileExports,
+    getNamedFileExports,
 };
