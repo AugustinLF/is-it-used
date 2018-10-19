@@ -12,6 +12,7 @@
     "babel-plugin-relay": "^1.6.2",
     "flow-parser": "^0.82.0",
     "graphql": "^0.13.2",
+    "graphql-tools": "^4.0.1",
     "isomorphic-unfetch": "^2.1.1",
     "jscodeshift": "^0.5.1",
     "next": "^7.0.2",
@@ -22,7 +23,9 @@
     "react-relay": "^1.6.2"
   },
   "devDependencies": {
+    "babel-jest": "^23.6.0",
     "graphql-cli": "^2.16.5",
+    "jest": "^23.6.0",
     "relay-compiler": "^1.6.2"
   }
 }

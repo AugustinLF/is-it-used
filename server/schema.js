@@ -1,4 +1,5 @@
-const {gql} = require('apollo-server-express');
+const {gql} = require('apollo-server');
+const {makeExecutableSchema} = require('graphql-tools');
 const {resolve} = require('path');
 
 const {getDefaultFileExports, getNamedFileExports} = require('./getFileExports');
@@ -117,7 +118,11 @@ function callSites(params) {
     return getAllFiles(['./fixtures']).then(files => getFileDependents(files, params));
 }
 
-module.exports = {
+const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
+});
+
+module.exports = {
+    schema,
 };

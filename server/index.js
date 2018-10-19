@@ -1,10 +1,9 @@
-const {ApolloServer, gql} = require('apollo-server');
+const {ApolloServer} = require('apollo-server');
 
-const {typeDefs, resolvers} = require('./graphql');
+const {schema} = require('./schema');
 
 const apolloServer = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema,
     formatError: error => {
         console.error(error);
         throw error;
